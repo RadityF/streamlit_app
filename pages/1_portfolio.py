@@ -4,6 +4,7 @@ from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFacto
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from pathlib import Path
 import os
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 #lowercase words
@@ -60,15 +61,8 @@ def text_processing(str_text):
     stemmed_tokens = tokens.apply(stemming)
     return " ".join(stemmed_tokens)
 
-model_vektor = "C:\samber\batch_1\streamlit_data_app\app\tfidf.pkl"
-model_NB = 'C:\samber\batch_1\streamlit_data_app\app\nb.pkl'
-# Load pickled files
-with open(model_vektor, 'rb') as tfidf_file:
-    tfidf = pickle.load(tfidf_file)
-
-with open(model_NB, 'rb') as nb_file:
-    nb = pickle.load(nb_file)
-
+tfidf = pickle.load(open('tfidf.pkl', 'rb'))
+nb = pickle.load(open('nb.pkl', 'rb'))
 
 def main():
     st.title('REVIEW TOKOPEDIA SENTIMEN ANALYSIS CHECKER')
