@@ -1,0 +1,7 @@
+streamlit
+pandas
+matpolib
+sastrawi
+pickle
+wordcloud
+numpy

@@ -106,7 +106,7 @@ st.write('\n')
 st.subheader("Work Experience")
 col1, col2 = st.columns([5,2])
 with col1:
-    st.write('**Data Analyst intern**, Kimia Farma , Indonesia')
+    st.write('**Data Analyst**, project-based virtual intern X Rakamin Academy')
     st.write(
     """
 - Implementing big data on Kimia Farma Sales Data

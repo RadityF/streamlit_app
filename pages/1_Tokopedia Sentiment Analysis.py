@@ -2,9 +2,12 @@ import streamlit as st
 import pickle
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory, StopWordRemover, ArrayDictionary
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-from pathlib import Path
-import os
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.model_selection import GridSearchCV
+from pathlib import Path
+from PIL import Image
 
 
 #lowercase words
@@ -32,21 +35,17 @@ def stopword(str_text):
 
 #tokenized
 def tokenized(str_text):
-   str_text.split()
+    return str_text.split()
 
-#masukkan tokenized ke stemming
-
-#stemming 
+# Stemming
 def stemming(Ulasan):
-  factory = StemmerFactory()
-  stemmer = factory.create_stemmer()
-  do = []
-  for w in Ulasan:
-    dt = stemmer.stem(w)
-    do.append(dt)
-  d_clean = []
-  d_clean = " ".join(do)
-  return d_clean
+    factory = StemmerFactory()
+    stemmer = factory.create_stemmer()
+    do = []
+    for w in Ulasan:
+        dt = stemmer.stem(w)
+        do.append(dt)
+    return do
 
 def text_processing(str_text):
     # Lowercase
@@ -58,7 +57,7 @@ def text_processing(str_text):
     # Tokenisasi
     tokens = tokenized(str_text)
     # Stemming
-    stemmed_tokens = tokens.apply(stemming)
+    stemmed_tokens = stemming(tokens)
     return " ".join(stemmed_tokens)
 
 tfidf = pickle.load(open('tfidf.pkl', 'rb'))
@@ -70,13 +69,14 @@ def main():
     ulasan = st.text_area('silahkan input ulasan')
 
     if st.button('submit'):
-       if ulasan:
-          clean_ulasan = text_processing(ulasan)
-          #ulasan 
-          vektor_ulasan = tfidf.transform(clean_ulasan)
-          predict_ulasan = nb.predict(vektor_ulasan)
-          hasil_sentimen = 'Positif' if predict_ulasan[0] == 1 else 'Negatif'
-          st.write('Sentimen Ulasan:', hasil_sentimen)
+        if ulasan:
+            clean_ulasan = text_processing(ulasan)
+            # Ulasan should be in a list
+            vektor_ulasan = tfidf.transform([clean_ulasan]).toarray()  # Convert to dense numpy array
+            predict_ulasan = nb.predict(vektor_ulasan)
+            hasil_sentimen = 'Positif' if predict_ulasan[0] == 1 else 'Negatif'
+            st.write('Sentimen Ulasan:', hasil_sentimen)
+
 
 if __name__ == '__main__':
     main()
