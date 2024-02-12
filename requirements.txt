@@ -1,0 +1,7 @@
+streamlit
+pandas
+sastrawi
+matplotlib
+numpy
+wordcloud
+
