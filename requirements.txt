@@ -4,4 +4,4 @@ sastrawi
 matplotlib
 numpy
 wordcloud
-
+scikit-learn
