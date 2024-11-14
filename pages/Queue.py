@@ -91,3 +91,64 @@ if st.button("Lihat Hasil Permainan"):
         else:
             st.write("Hasil string T setelah bermain adalah:")
             st.write(hasil)
+
+# Tombol "Lihat Kode" menggunakan expander
+with st.expander("Lihat Kode Program"):
+    st.code('''\
+import streamlit as st
+
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def __getitem__(self, index):
+        return self.items[index]
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.items.pop(0)
+        else:
+            return "Queue is empty"
+
+def suspense_game(n, binarystring):
+    resultstring = []
+    for i in range(n):
+        if binarystring[i] not in ['0', '1']:
+            return "Invalid input"
+    if n % 2 == 0:
+        alice_choices = binarystring[:n // 2]
+        bob_choices = binarystring[n // 2:]
+    else:
+        alice_choices = binarystring[:(n // 2) + 1]
+        bob_choices = binarystring[(n // 2) + 1:]
+    reverse_bob_choices = bob_choices[::-1]
+    elemen_alice = Queue()
+    elemen_bob = Queue()
+    for char in alice_choices:
+        elemen_alice.enqueue(char)
+    for char in reverse_bob_choices:
+        elemen_bob.enqueue(char)
+    is_alice_turn = True
+    while not (elemen_alice.is_empty() and elemen_bob.is_empty()):
+        if is_alice_turn and not elemen_alice.is_empty():
+            char = elemen_alice.dequeue()
+            if resultstring and char < resultstring[0]:
+                resultstring.insert(0, char)
+            else:
+                resultstring.append(char)
+        elif not is_alice_turn and not elemen_bob.is_empty():
+            char = elemen_bob.dequeue()
+            if resultstring and char > resultstring[0]:
+                resultstring.insert(0, char)
+            else:
+                resultstring.append(char)
+        is_alice_turn = not is_alice_turn
+    final_result = ''.join(resultstring)
+    return final_result
+    ''', language='python')
